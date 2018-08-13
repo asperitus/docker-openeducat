@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --out chart
+    kompose.version: 1.16.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: openeducat11
+  name: openeducat11
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: openeducat11
+    spec:
+      containers:
+        - name: openeducat
+          image: asperitus/openeducat:11.0
+          env:
+            - name: DB_ENV_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: password
+            - name: DB_ENV_POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: username
+            - name: DB_PORT_5432_TCP_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: configs
+                  key: db_port_addr
+          ports:
+            - containerPort: 8069
+            - containerPort: 8071
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,11 @@
+#
+.git
+.gitignore
+#
+.env
+chart
+local
+build.sh
+docker-compose.yml
+README.md
+run.sh
